@@ -13,7 +13,7 @@
       instance_tags:
         Name: "{{inst_name}}-web"
         Type: Linux_AWS
-      wait: false
+      wait: true
       group: default
       exact_count: 1
       count_tag: foo
