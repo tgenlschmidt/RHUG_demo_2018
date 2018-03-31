@@ -74,8 +74,11 @@
    - name: set hostname
      hostname: name={{inventory_hostname}}
 
+   - name: display variables
+     debug: msg="db={{ dbserver_address }}, web={{ webserver_address }}"
+
 - import_playbook: ansible_dbserver.yml 
-- import_playbook: ansible_webserver.yml
+- import_playbook: ansible_webserver.yml dbhost={{dbserver_address}}
   vars:
    dbhost: "{{ dbserver_address }}"
 
