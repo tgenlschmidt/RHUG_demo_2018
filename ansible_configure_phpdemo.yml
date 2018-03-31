@@ -32,4 +32,9 @@
      hostname: name={{inventory_hostname}}
 - import_playbook: ansible_dbserver.yml
 - import_playbook: ansible_webserver.yml
-- debug: var="PHP Demo application has been succesfully installed on {{ec2.instances[0].dns_name}}"
+
+- hosts: localhost
+  become: false
+  gather_facts: false
+  tasks:
+   - debug: var="PHP Demo application has been succesfully installed on {{ec2.instances[0].dns_name}}"
