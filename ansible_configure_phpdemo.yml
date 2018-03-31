@@ -1,3 +1,9 @@
 ---
+- hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+   - name: set hostname
+     hostname: name={{inventory_hostname}}
 - import_playbook: ansible_dbserver.yml
 - import_playbook: ansible_webserver.yml
