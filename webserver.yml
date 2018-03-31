@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+   - name: Install required packages
+     yum: name={{item}} state=installed
+     with_items:
+      - httpd
+      - php
+      - php-mysql
+
+   - name: start and enable Apache
+     service: name=httpd state=started enabled=true
+
+   - name: copy application files
+     copy: src=./ dest=/var/www/html
