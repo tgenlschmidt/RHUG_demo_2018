@@ -18,17 +18,14 @@
      mysql_db: name={{dbname}} state=present
      register: db
 
-   - name: Create directories
-     file: path=/var/www/html state=directory recurse=yes
-
    - name: Copy db files
-     copy: src=create-tables.sql dest=/var/www/html
+     copy: src=create-tables.sql dest=/tmp
 
    - name: Import database
      mysql_db:
       state: import
       name: "{{dbname}}"
-      target: /var/www/html/create-tables.sql
+      target: /tmp/create-tables.sql
      when: db | changed
 
    - name: Create database user
