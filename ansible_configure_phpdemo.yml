@@ -77,3 +77,4 @@
   gather_facts: false
   tasks:
    - debug: msg="PHP Demo application has been succesfully installed on {{ ec2_web.instances[0].dns_name }}"
+
