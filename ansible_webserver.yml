@@ -21,3 +21,7 @@
 
    - name: Configure database access
      template: src=dbvars.php.j2 dest=/var/www/html/dbvars.php
+
+   - name: Configure selinux settings
+     command: setsebool -P httpd_can_network_connect=1
+
