@@ -59,8 +59,8 @@
       search_regex: OpenSSH
      delay: 60
      with_items:
-      - "{{ec2_web.results[0].instances[0].dns_name}}"
-      - "{{ec2_db.results[1].instances[0].dns_name}}"
+      - "{{ ec2_web.results[0].instances[0].dns_name }}"
+      - "{{ ec2_db.results[0].instances[0].dns_name }}"
 
 - hosts: all
   become: true
@@ -70,10 +70,10 @@
      hostname: name={{inventory_hostname}}
 
 - import_playbook: ansible_dbserver.yml 
-- import_playbook: ansible_webserver.yml dbhost={{ec2.results[1].instances[0].dns_name}}
+- import_playbook: ansible_webserver.yml dbhost={{ ec2_web.instances[0].dns_name }}
 
 - hosts: localhost
   become: false
   gather_facts: false
   tasks:
-   - debug: msg="PHP Demo application has been succesfully installed on {{ec2.instances[0].dns_name}}"
+   - debug: msg="PHP Demo application has been succesfully installed on {{ ec2_web.instances[0].dns_name }}"
