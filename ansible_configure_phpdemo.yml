@@ -11,7 +11,7 @@
       instance_type: t2.micro
       image: ami-26ebbc5c
       instance_tags:
-        Name: "{{inst_name}}"
+        Name: "{{inst_name}}-{{item}}"
         Type: Linux_AWS
       wait: yes
       group: default
@@ -21,6 +21,12 @@
       assign_public_ip: yes
       region: us-east-1
      register: ec2
+     with_items:
+      - web
+      - db
+
+   - debug: var=ec2
+   - fail:
 
    - debug: msg="Adding host {{ec2.instances[0].dns_name}}"
 
@@ -46,4 +52,4 @@
   become: false
   gather_facts: false
   tasks:
-   - debug: var="PHP Demo application has been succesfully installed on {{ec2.instances[0].dns_name}}"
+   - debug: msg="PHP Demo application has been succesfully installed on {{ec2.instances[0].dns_name}}"
