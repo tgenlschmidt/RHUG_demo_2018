@@ -2,4 +2,3 @@
 dbname: customers
 dbuser: customer
 dbpassword: password
-dbhost: localhost
