@@ -18,6 +18,9 @@
      mysql_db: name={{dbname}} state=present
      register: db
 
+   - name: Create directories
+     file: path=/var/www/html state=directory recurse=yes
+
    - name: Copy db files
      copy: src=create-tables.sql dest=/var/www/html
 
