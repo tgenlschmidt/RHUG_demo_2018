@@ -1,4 +1,29 @@
 ---
+- hosts: localhost
+  become: false
+  gather_facts: false
+  tasks:
+   - name: Create an instance in AWS
+     ec2:
+      aws_access_key: "{{AWS_ACCESS_KEY}}"
+      aws_secret_key: "{{AWS_SECRET_KEY}}"
+      key_name: akropachev
+      instance_type: t2.micro
+      image: ami-26ebbc5c
+      instance_tags:
+        Name: "{{inst_name}}"
+        Type: Linux_AWS
+      wait: yes
+      group: default
+      exact_count: 1
+      count_tag: foo
+      vpc_subnet_id: subnet-c86b14e2
+      assign_public_ip: yes
+      region: us-east-1
+     register: ec2
+   - debug: var="Adding host {{ec2.instances[0].dns_name}}"
+   - add_host: name={{ec2.instances[0].dns_name}}
+
 - hosts: all
   become: true
   gather_facts: false
@@ -7,3 +32,4 @@
      hostname: name={{inventory_hostname}}
 - import_playbook: ansible_dbserver.yml
 - import_playbook: ansible_webserver.yml
+- debug: var="PHP Demo application has been succesfully installed on {{ec2.instances[0].dns_name}}"
