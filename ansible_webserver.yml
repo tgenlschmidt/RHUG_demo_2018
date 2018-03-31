@@ -1,8 +1,11 @@
 ---
-- hosts: all
+- hosts: localhost
   become: true
   gather_facts: true
+  vars_files:
+   - dbparams.yml
   tasks:
+   - debug: var=dbuser
    - name: Install required packages
      yum: name={{item}} state=installed
      with_items:
@@ -10,8 +13,11 @@
       - php
       - php-mysql
 
-   - name: start and enable Apache
+   - name: Start and enable Apache
      service: name=httpd state=started enabled=true
 
-   - name: copy application files
+   - name: Copy application files
      copy: src=./ dest=/var/www/html
+
+   - name: Configure database access
+     template: src=dbvars.php.j2 dest=/var/www/html/dbvars.php

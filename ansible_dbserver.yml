@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  become: true
+  gather_facts: true
+  vars_files:
+   - dbparams.yml
+  tasks:
+   - name: Install required packages
+     yum: name={{item}} state=installed
+     with_items:
+      - mariadb-server
+      - MySQL-python
+
+   - name: Start and enable Apache
+     service: name=mariadb state=started enabled=true
+
+   - name: Create database
+     mysql_db: name={{dbname}} state=present
+     register: db
+
+   - name: Copy db files
+     copy: src=create-tables.sql dest=/var/www/html
+
+   - name: Import database
+     mysql_db:
+      state: import
+      name: "{{dbname}}"
+      target: /var/www/html/create-tables.sql
+     when: db | changed
+
+   - name: Create database user
+     mysql_user:
+      name: "{{dbuser}}"
+      password: "{{dbpassword}}"
+      priv: "*.*:ALL"
+      host: "{{item}}"
+      update_password: always
+      state: present
+     with_items:
+      - "%"
+      - localhost
+
+ 
+
