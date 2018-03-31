@@ -62,6 +62,11 @@
       - "{{ ec2_web.instances[0].dns_name }}"
       - "{{ ec2_db.instances[0].dns_name  }}"
 
+   - name: Set variables
+     set_fact:
+      dbserver_address: "{{ec2_db.instances[0].dns_name}}"
+      webserver_address: "{{ ec2_web.instances[0].dns_name }}"
+
 - hosts: all
   become: true
   gather_facts: false
@@ -74,7 +79,7 @@
 - import_playbook: ansible_dbserver.yml 
 - import_playbook: ansible_webserver.yml
   vars:
-   dbhost: "{{ ec2_web.instances[0].dns_name }}"
+   dbhost: "{{ dbserver_address }}"
 
 - hosts: localhost
   become: false
