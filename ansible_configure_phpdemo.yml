@@ -59,8 +59,8 @@
       search_regex: OpenSSH
      delay: 60
      with_items:
-      - "{{ec2.results[0].instances[0].dns_name}}"
-      - "{{ec2.results[1].instances[0].dns_name}}"
+      - "{{ec2_web.results[0].instances[0].dns_name}}"
+      - "{{ec2_db.results[1].instances[0].dns_name}}"
 
 - hosts: all
   become: true
