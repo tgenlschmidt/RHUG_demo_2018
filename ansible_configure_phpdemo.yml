@@ -79,8 +79,9 @@
 
 - import_playbook: ansible_dbserver.yml 
 - import_playbook: ansible_webserver.yml dbhost={{dbserver_address}}
-  vars:
-   dbhost: "{{ dbserver_address }}"
+
+#  vars:
+#   dbhost: "{{ dbserver_address }}"
 
 - hosts: localhost
   become: false
