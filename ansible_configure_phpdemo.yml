@@ -69,6 +69,8 @@
    - name: set hostname
      hostname: name={{inventory_hostname}}
 
+   - debug: var=ec2_db
+
 - import_playbook: ansible_dbserver.yml 
 - import_playbook: ansible_webserver.yml dbhost={{ ec2_web.instances[0].dns_name }}
 
