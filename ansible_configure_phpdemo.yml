@@ -78,19 +78,7 @@
    - name: set hostname
      hostname: name={{inventory_hostname}}
 
-   - name: display variables
-     debug: msg="db={{ dbserver_address }}, web={{ webserver_address }}"
 
 - import_playbook: ansible_dbserver.yml 
 - import_playbook: ansible_webserver.yml
-#dbhost={{dbserver_address}}
-
-#  vars:
-#   dbhost: "{{ dbserver_address }}"
-
-- hosts: localhost
-  become: false
-  gather_facts: false
-  tasks:
-   - debug: msg="PHP Demo application has been succesfully installed on {{ ec2_web.instances[0].dns_name }}"
 
