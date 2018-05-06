@@ -2,16 +2,18 @@
 - hosts: localhost
   become: false
   gather_facts: false
+  vars_files:
+   - aws.yml
   tasks:
    - name: Create a webserver instance in AWS
      ec2:
-      aws_access_key: "{{AWS_ACCESS_KEY}}"
-      aws_secret_key: "{{AWS_SECRET_KEY}}"
-      key_name: akropachev
+      aws_access_key: "{{ AWS_ACCESS_KEY }}"
+      aws_secret_key: "{{ AWS_SECRET_KEY }}"
+      key_name: ausov
       instance_type: t2.micro
       image: ami-26ebbc5c
       instance_tags:
-        Name: "{{inst_name}}-web"
+        Name: "{{ NAME }}-web"
         Type: Linux_AWS
       wait: true
       group: default
@@ -24,13 +26,13 @@
 
    - name: Create a database instance in AWS
      ec2:
-      aws_access_key: "{{AWS_ACCESS_KEY}}"
-      aws_secret_key: "{{AWS_SECRET_KEY}}"
-      key_name: akropachev
+      aws_access_key: "{{ AWS_ACCESS_KEY }}"
+      aws_secret_key: "{{ AWS_SECRET_KEY }}"
+      key_name: ausov
       instance_type: t2.micro
       image: ami-26ebbc5c
       instance_tags:
-        Name: "{{inst_name}}-db"
+        Name: "{{ NAME }}-db"
         Type: Linux_AWS
       wait: true
       group: default
@@ -43,17 +45,17 @@
 
    - debug: var=ec2_db
    - debug: var=ec2_web
-   - debug: msg="Adding host {{ec2_web.instances[0].dns_name}} and {{ec2_db.instances[0].dns_name}}"
+   - debug: msg="Adding host {{ ec2_web.instances[0].dns_name }} and {{ ec2_db.instances[0].dns_name }}"
 
    - name: Adding Web server to inventory {{ec2_web.instances[0].dns_name}}
      add_host:
-      name: "{{ec2_web.instances[0].dns_name}}"
+      name: "{{ ec2_web.instances[0].dns_name }}"
       group: webservers
       dbhost: "{{ ec2_db.instances[0].dns_name  }}"
 
-   - name: Adding DB server to inventory {{ec2_db.instances[0].dns_name}}
+   - name: Adding DB server to inventory {{ ec2_db.instances[0].dns_name }}
      add_host:
-      name: "{{ec2_db.instances[0].dns_name}}"
+      name: "{{ ec2_db.instances[0].dns_name }}"
       group: dbservers
 
    - name: Wait for hosts to come up
@@ -68,8 +70,20 @@
 
    - name: Set variables
      set_fact:
-      dbserver_address: "{{ec2_db.instances[0].dns_name}}"
+      dbserver_address: "{{ ec2_db.instances[0].dns_name }}"
       webserver_address: "{{ ec2_web.instances[0].dns_name }}"
+
+   - name: Set DNS for external access
+     route53:
+      aws_access_key: "{{ AWS_ACCESS_KEY }}"
+      aws_secret_key: "{{ AWS_SECRET_KEY }}"
+      record: "{{ NAME }}.demo.li9.com"
+      state: present
+      type: A
+      zone: demo.li9.com
+      ttl: 300
+      overwrite: yes
+      value: "{{ ec2_web.instances[0].public_ip }}"
 
 - hosts: all
   become: true
