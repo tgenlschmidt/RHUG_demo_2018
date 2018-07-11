@@ -40,8 +40,8 @@
             #      - psacct
       - docker
       - ansible
-      - httpd-tools
-      - java-1.8.0-openjdk-headless
+        #      - httpd-tools
+        #      - java-1.8.0-openjdk-headless
 
   - name: Configure Docker storage on masters
     copy:
