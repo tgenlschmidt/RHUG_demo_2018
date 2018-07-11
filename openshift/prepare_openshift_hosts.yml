@@ -29,15 +29,15 @@
       name: '{{item}}'
     with_items:
       - git
-      - wget
-      - net-tools
-      - bridge-utils
-      - iptables-services
-      - bind-utils
-      - bash-completion
-      - kexec-tools
-      - sos
-      - psacct
+            #      - wget
+            #      - net-tools
+            #      - bridge-utils
+            #      - iptables-services
+            #      - bind-utils
+            #      - bash-completion
+            #      - kexec-tools
+            #      - sos
+            #      - psacct
       - docker
       - ansible
       - httpd-tools
